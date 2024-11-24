@@ -8,6 +8,7 @@ import { Download } from 'lucide-react';
 
 const HavoAdmitCard = () => {
   const [formData, setFormData] = useState({
+    applicant: '',
     name: '',
     fatherName: ''
   });
@@ -46,7 +47,7 @@ const HavoAdmitCard = () => {
           <div className='ml-24'>
           <div className="text-lg">
             <span className="font-semibold">Applicant Code: </span>
-            <span>SCP/25/0001</span>
+            <span>{formData.applicant || '_________________'}</span>
           </div>
           <div className="text-lg">
             <span className="font-semibold">Name: </span>
@@ -142,6 +143,10 @@ const HavoAdmitCard = () => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
+            <div>
+              <Label htmlFor='applicant'>Applicant code</Label>
+              <Input id='applicant' name='applicant' value={formData.applicant} onChange={handleInputChange} placeholder='Enter the applicant code'></Input>
+            </div>
             <div>
               <Label htmlFor="name">Full Name</Label>
               <Input
