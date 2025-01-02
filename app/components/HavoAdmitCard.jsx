@@ -9,12 +9,12 @@ import * as XLSX from 'xlsx';
 
 // Define AdmitCard component separately
 const AdmitCard = ({ formData }) => (
-  <div className="p-4 rounded-lg w-[800px] mx-auto" id="admitCard">
+  <div className="p-4 rounded-lg w-[750px] mx-auto" id="admitCard">
     <div className="p-6" style={{
         backgroundImage: `url('bg.jpg')`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundSize: '900px',
+        backgroundSize: '750px',
       }}>
       <div className="flex items-center gap-4 mb-6">
         <div className="w-40 h-[960px] flex-shrink-0">
@@ -25,15 +25,15 @@ const AdmitCard = ({ formData }) => (
           {/* <div className="bg-green-700 text-white rounded-lg text-xl font-sans mt-5 pl-4 pb-5">
             HAVO Matric Scholarship Test 2025 (DIGITAL ADMIT CARD)
           </div> */}
-      <div className="mb-[310px]">
-        <div className='ml-[10px]'>
-          <div className='text-sm mb-[10px]'>
+      <div className="mb-[260px]">
+        <div className='ml-[14px] mt-5'>
+          <div className='text-lg'>
             <span className='font-bold'>{formData.applicant || '_________________'}</span>
           </div>
-          <div className="text-sm">
+          <div className="text-lg">
             <span className='font-bold'>{formData.name || '_________________'}</span>
           </div>
-          <div className=" text-sm mt-4">
+          <div className=" text-lg">
             <span className='font-bold'>{formData.fatherName || '_________________'}</span>
           </div>
         </div>
@@ -214,7 +214,7 @@ const HavoAdmitCard = () => {
         if (format === 'image') {
           const link = document.createElement('a');
           link.href = image;
-          link.download = `HAVO-admit-card-${formData.name}.png`;
+          link.download = `${formData.applicant}.png`;
           link.click();
         } else if (format === 'pdf') {
           const { jsPDF } = await import('jspdf');
@@ -223,7 +223,7 @@ const HavoAdmitCard = () => {
           const pdfWidth = pdf.internal.pageSize.getWidth();
           const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
           pdf.addImage(image, 'PNG', 0, 0, pdfWidth, pdfHeight);
-          pdf.save(`HAVO-admit-card-${formData.name}.pdf`);
+          pdf.save(`${formData.applicant}.pdf`);
         }
 
         if (formData.name) {
