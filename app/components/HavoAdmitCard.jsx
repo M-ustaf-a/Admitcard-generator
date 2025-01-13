@@ -1,23 +1,26 @@
-"use client"
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Download, Send } from 'lucide-react';
-import * as XLSX from 'xlsx';
+"use client";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Bold, Download, Send } from "lucide-react";
+import * as XLSX from "xlsx";
 
 // Define AdmitCard component separately
 const AdmitCard = ({ formData }) => (
   <div className="p-4 rounded-lg w-[750px] mx-auto" id="admitCard">
-    <div className="p-6" style={{
-        backgroundImage: `url('bg.jpg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: '750px',
-      }}>
+    <div
+      className="p-6"
+      style={{
+        backgroundImage: `url('bg.png')`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "750px",
+      }}
+    >
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-40 h-[960px] flex-shrink-0">
+        <div className="w-11 h-[960px] flex-shrink-0">
           {/* <img src="logo.jpg" alt="HAVO Logo" className="w-full h-full object-contain" /> */}
         </div>
         <div className="flex-1">
@@ -25,33 +28,54 @@ const AdmitCard = ({ formData }) => (
           {/* <div className="bg-green-700 text-white rounded-lg text-xl font-sans mt-5 pl-4 pb-5">
             HAVO Matric Scholarship Test 2025 (DIGITAL ADMIT CARD)
           </div> */}
-      <div className="mb-[260px]">
-        <div className='ml-[14px] mt-5'>
-          <div className='text-lg'>
-            <span className='font-bold'>{formData.applicant || '_________________'}</span>
-          </div>
-          <div className="text-lg">
-            <span className='font-bold'>{formData.name || '_________________'}</span>
-          </div>
-          <div className=" text-lg">
-            <span className='font-bold'>{formData.fatherName || '_________________'}</span>
-          </div>
-        </div>
-        <div className='mt-16'>
-          <div className="text-lg">
-            {/* <span className="font-semibold">Test Date: </span>
+          <div className="mb-[160px]">
+            <div className=" mt-5">
+              <div className="flex gap-7">
+                <div>
+                  <Label style={{fontWeight: "bolder"}}>Applicant code</Label>
+                </div>
+                <div className="text-lg">
+                  <span style={{fontSize: '13px', fontWeight: 'bold'}}>
+                    {formData.applicant || "_________________"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div>
+                  <Label style={{fontWeight: "bolder"}}>Applicant Name</Label>
+                </div>
+                <div className="text-lg">
+                  <span style={{fontSize: '13px', fontWeight: 'bold'}}>
+                    {formData.name || "_________________"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex gap-9">
+                <div>
+                  <Label className="" style={{fontWeight: "bolder"}}>Father's Name</Label>
+                </div>
+                <div className=" text-lg">
+                  <span style={{fontSize: '13px', fontWeight: 'bold'}}>
+                    {formData.fatherName || "_________________"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-16">
+              <div className="text-lg">
+                {/* <span className="font-semibold">Test Date: </span>
             <span>12 January 2025 (SUNDAY)</span> */}
-          </div>
-          <div className="text-lg">
-            {/* <span className="font-semibold">Time: </span>
+              </div>
+              <div className="text-lg">
+                {/* <span className="font-semibold">Time: </span>
             <span>12:00 PM TO 02:00 PM</span> */}
-          </div>
-          <div className="text-lg">
-            {/* <span className="font-semibold">Test Centre: </span>
+              </div>
+              <div className="text-lg">
+                {/* <span className="font-semibold">Test Centre: </span>
             <span>Online</span> */}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         </div>
       </div>
       <div className="mt-8">
@@ -78,10 +102,10 @@ const AdmitCard = ({ formData }) => (
 
 const HavoAdmitCard = () => {
   const [formData, setFormData] = useState({
-    applicant: '',
-    name: '',
-    fatherName: '',
-    whatsappNumber: ''
+    applicant: "",
+    name: "",
+    fatherName: "",
+    whatsappNumber: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -89,35 +113,35 @@ const HavoAdmitCard = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const formatWhatsAppNumber = (number) => {
-    const cleaned = number.replace(/\D/g, '');
-    return cleaned.startsWith('91') ? cleaned : `91${cleaned}`;
+    const cleaned = number.replace(/\D/g, "");
+    return cleaned.startsWith("91") ? cleaned : `91${cleaned}`;
   };
 
   const validateWhatsAppNumber = (number) => {
-    const cleaned = number.replace(/\D/g, '');
+    const cleaned = number.replace(/\D/g, "");
     return cleaned.length >= 10 && cleaned.length <= 12;
   };
 
   const saveSpreadsheet = (names) => {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.aoa_to_sheet([
-      ['Date', 'Name', 'WhatsApp Number', 'Status'],
-      ...Array.from(names).map(name => [
+      ["Date", "Name", "WhatsApp Number", "Status"],
+      ...Array.from(names).map((name) => [
         new Date().toLocaleDateString(),
         name,
         formData.whatsappNumber,
-        'Sent'
-      ])
+        "Sent",
+      ]),
     ]);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Downloaded Names');
-    XLSX.writeFile(workbook, 'admit-cards-record.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Downloaded Names");
+    XLSX.writeFile(workbook, "admit-cards-record.xlsx");
   };
 
   const sendToWhatsApp = async (imageUrl) => {
@@ -125,7 +149,7 @@ const HavoAdmitCard = () => {
       toast({
         title: "Invalid WhatsApp Number",
         description: "Please enter a valid 10-digit mobile number",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -134,20 +158,20 @@ const HavoAdmitCard = () => {
 
     try {
       setIsLoading(true);
-      const response = await fetch('/api/send-whatsapp', {
-        method: 'POST',
+      const response = await fetch("/api/send-whatsapp", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           phone: formattedNumber,
           image: imageUrl,
-          message: `Dear ${formData.name},\n\nHere is your HAVO Matric Scholarship Test 2025 Admit Card.\n\nTest Details:\nDate: 12 January 2025 (SUNDAY)\nTime: 12:00 PM TO 02:00 PM\nVenue: Online\n\nFor any queries, contact helpdesk: 0829-407-9985\n\nBest regards,\nHAVO Team`
+          message: `Dear ${formData.name},\n\nHere is your HAVO Matric Scholarship Test 2025 Admit Card.\n\nTest Details:\nDate: 12 January 2025 (SUNDAY)\nTime: 12:00 PM TO 02:00 PM\nVenue: Online\n\nFor any queries, contact helpdesk: 0829-407-9985\n\nBest regards,\nHAVO Team`,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send WhatsApp message');
+        throw new Error("Failed to send WhatsApp message");
       }
 
       toast({
@@ -155,13 +179,12 @@ const HavoAdmitCard = () => {
         description: "Admit card sent successfully on WhatsApp",
       });
       return true;
-
     } catch (error) {
-      console.error('WhatsApp sending error:', error);
+      console.error("WhatsApp sending error:", error);
       toast({
         title: "Error",
         description: "Failed to send admit card on WhatsApp. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     } finally {
@@ -169,114 +192,115 @@ const HavoAdmitCard = () => {
     }
   };
 
-  const captureAndDownload = async (format, shouldSendWhatsApp = false) => {
-    const admitCard = document.getElementById('admitCard');
+    const captureAndDownload = async (format, shouldSendWhatsApp = false) => {
+    const admitCard = document.getElementById("admitCard");
 
     if (!formData.name || !formData.applicant || !formData.fatherName) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields",
-        variant: "destructive"
-      });
-      return;
+        toast({
+            title: "Missing Information",
+            description: "Please fill in all required fields",
+            variant: "destructive",
+        });
+        return;
     }
 
     if (shouldSendWhatsApp && !formData.whatsappNumber) {
-      toast({
-        title: "Missing WhatsApp Number",
-        description: "Please enter a WhatsApp number to send the admit card",
-        variant: "destructive"
-      });
-      return;
+        toast({
+            title: "Missing WhatsApp Number",
+            description: "Please enter a WhatsApp number to send the admit card",
+            variant: "destructive",
+        });
+        return;
     }
 
     try {
-      setIsLoading(true);
-      const html2canvas = (await import('html2canvas')).default;
-      
-      // Optimize canvas capture settings
-      const canvas = await html2canvas(admitCard, {
-        scale: 1.5, // Reduced from 2 to 1.5 for better file size
-        backgroundColor: '#ffffff',
-        logging: false, // Disable logging
-        useCORS: true,
-        imageTimeout: 0,
-        removeContainer: true,
-        // Add compression settings
-        quality: 0.85 // Reduce quality slightly for better compression
-      });
+        setIsLoading(true);
+        const html2canvas = (await import("html2canvas")).default;
 
-      // For image format, compress before creating URL
-      const image = canvas.toDataURL('image/png', 0.85); // Add compression quality
-
-      if (shouldSendWhatsApp) {
-        const sent = await sendToWhatsApp(image);
-        if (sent && formData.name) {
-          setDownloadedNamesSet(prevSet => {
-            const newSet = new Set(prevSet);
-            newSet.add(formData.name);
-            saveSpreadsheet(newSet);
-            return newSet;
-          });
-        }
-      } else {
-        if (format === 'image') {
-          const link = document.createElement('a');
-          link.href = image;
-          link.download = `${formData.applicant}.png`;
-          link.click();
-        } else if (format === 'pdf') {
-          const { jsPDF } = await import('jspdf');
-          const pdf = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: 'a4',
-            compress: true // Enable PDF compression
-          });
-          
-          const imgProps = pdf.getImageProperties(image);
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-          
-          // Add image with compression settings
-          pdf.addImage(image, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST', 0);
-          
-          // Set PDF metadata to optimize file size
-          pdf.setProperties({
-            title: `Admit Card - ${formData.applicant}`,
-            creator: 'HAVO Admit Card Generator',
-            producer: 'HAVO',
-            compressed: true
-          });
-          
-          pdf.save(`${formData.applicant}.pdf`);
-        }
-
-        if (formData.name) {
-          setDownloadedNamesSet(prevSet => {
-            const newSet = new Set(prevSet);
-            newSet.add(formData.name);
-            saveSpreadsheet(newSet);
-            return newSet;
-          });
-        }
-
-        toast({
-          title: "Success!",
-          description: `Admit card ${format === 'pdf' ? 'PDF' : 'image'} downloaded successfully`,
+        const canvas = await html2canvas(admitCard, {
+            scale: 3, // Increased scale for better image quality
+            backgroundColor: "#ffffff",
+            logging: false,
+            useCORS: true,
         });
-      }
+
+        const image = canvas.toDataURL("image/png", 1.0); // Set quality to maximum
+
+        if (shouldSendWhatsApp) {
+            const sent = await sendToWhatsApp(image);
+            if (sent && formData.name) {
+                setDownloadedNamesSet((prevSet) => {
+                    const newSet = new Set(prevSet);
+                    newSet.add(formData.name);
+                    saveSpreadsheet(newSet);
+                    return newSet;
+                });
+            }
+        } else {
+            if (format === "image") {
+                const link = document.createElement("a");
+                link.href = image;
+                link.download = `${formData.applicant}.png`;
+                link.click();
+            } else if (format === "pdf") {
+                const { jsPDF } = await import("jspdf");
+                const pdf = new jsPDF({
+                    orientation: "p",
+                    unit: "mm",
+                    format: "a4",
+                    compress: true,
+                });
+
+                const imgProps = pdf.getImageProperties(image);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                pdf.addImage(
+                    image,
+                    "PNG",
+                    0,
+                    0,
+                    pdfWidth,
+                    pdfHeight,
+                    undefined,
+                    "SLOW" // Use slower compression for better quality
+                );
+
+                pdf.setProperties({
+                    title: `Admit Card - ${formData.applicant}`,
+                    creator: "HAVO Admit Card Generator",
+                });
+
+                pdf.save(`${formData.applicant}.pdf`);
+            }
+
+            if (formData.name) {
+                setDownloadedNamesSet((prevSet) => {
+                    const newSet = new Set(prevSet);
+                    newSet.add(formData.name);
+                    saveSpreadsheet(newSet);
+                    return newSet;
+                });
+            }
+
+            toast({
+                title: "Success!",
+                description: `Admit card ${
+                    format === "pdf" ? "PDF" : "image"
+                } downloaded successfully`,
+            });
+        }
     } catch (error) {
-      console.error('Error generating admit card:', error);
-      toast({
-        title: "Error",
-        description: "Failed to generate admit card. Please try again.",
-        variant: "destructive"
-      });
+        console.error("Error generating admit card:", error);
+        toast({
+            title: "Error",
+            description: "Failed to generate admit card. Please try again.",
+            variant: "destructive",
+        });
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  }
+};
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-8">
@@ -287,13 +311,13 @@ const HavoAdmitCard = () => {
         <CardContent>
           <div className="grid gap-4">
             <div>
-              <Label htmlFor='applicant'>Applicant code *</Label>
-              <Input 
-                id='applicant' 
-                name='applicant' 
-                value={formData.applicant} 
-                onChange={handleInputChange} 
-                placeholder='Enter the applicant code'
+              <Label htmlFor="applicant">Applicant code *</Label>
+              <Input
+                id="applicant"
+                name="applicant"
+                value={formData.applicant}
+                onChange={handleInputChange}
+                placeholder="Enter the applicant code"
                 required
               />
             </div>
@@ -332,29 +356,29 @@ const HavoAdmitCard = () => {
               />
             </div>
             <div className="flex gap-4 mt-6">
-              <Button 
-                onClick={() => captureAndDownload('pdf')} 
+              <Button
+                onClick={() => captureAndDownload("pdf")}
                 className="flex items-center gap-2"
                 disabled={isLoading}
               >
                 <Download size={16} />
                 Download PDF
               </Button>
-              <Button 
-                onClick={() => captureAndDownload('image')} 
+              <Button
+                onClick={() => captureAndDownload("image")}
                 className="flex items-center gap-2"
                 disabled={isLoading}
               >
                 <Download size={16} />
                 Download Image
               </Button>
-              <Button 
-                onClick={() => captureAndDownload('image', true)} 
+              <Button
+                onClick={() => captureAndDownload("image", true)}
                 className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
                 disabled={isLoading}
               >
                 <Send size={16} />
-                {isLoading ? 'Sending...' : 'Send on WhatsApp'}
+                {isLoading ? "Sending..." : "Send on WhatsApp"}
               </Button>
             </div>
           </div>
