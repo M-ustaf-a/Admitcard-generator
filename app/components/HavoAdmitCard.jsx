@@ -193,12 +193,21 @@ const HavoAdmitCard = () => {
     try {
       setIsLoading(true);
       const html2canvas = (await import('html2canvas')).default;
+      
+      // Optimize canvas capture settings
       const canvas = await html2canvas(admitCard, {
-        scale: 2,
-        backgroundColor: '#ffffff'
+        scale: 1.5, // Reduced from 2 to 1.5 for better file size
+        backgroundColor: '#ffffff',
+        logging: false, // Disable logging
+        useCORS: true,
+        imageTimeout: 0,
+        removeContainer: true,
+        // Add compression settings
+        quality: 0.85 // Reduce quality slightly for better compression
       });
 
-      const image = canvas.toDataURL('image/png');
+      // For image format, compress before creating URL
+      const image = canvas.toDataURL('image/png', 0.85); // Add compression quality
 
       if (shouldSendWhatsApp) {
         const sent = await sendToWhatsApp(image);
@@ -218,11 +227,28 @@ const HavoAdmitCard = () => {
           link.click();
         } else if (format === 'pdf') {
           const { jsPDF } = await import('jspdf');
-          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+            compress: true // Enable PDF compression
+          });
+          
           const imgProps = pdf.getImageProperties(image);
           const pdfWidth = pdf.internal.pageSize.getWidth();
           const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-          pdf.addImage(image, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          
+          // Add image with compression settings
+          pdf.addImage(image, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST', 0);
+          
+          // Set PDF metadata to optimize file size
+          pdf.setProperties({
+            title: `Admit Card - ${formData.applicant}`,
+            creator: 'HAVO Admit Card Generator',
+            producer: 'HAVO',
+            compressed: true
+          });
+          
           pdf.save(`${formData.applicant}.pdf`);
         }
 
@@ -250,7 +276,7 @@ const HavoAdmitCard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-8">
